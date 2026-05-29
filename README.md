@@ -256,7 +256,44 @@ _(Steps & Code Snippets, Screenshot, Full Code)_
 Jelaskan langkah-langkah yang dilakukan dan berikan potongan kode dari langkah-langkah yang kalian jelaskan jika ada.  
 _Explain the steps performed and include relevant code snippets from the steps you describe if applicable._
 
-- 
+- div
+  	- buat variabel untuk simpan nilai absolut dari a dan b
+  	- pembagian adalah pengurangan berulang, buat variabel untuk simpan jumlah perulangan yaitu d.
+  	- pada pembagian berlaku akan menjadi mines jika kedua tanda bilangan berbeda, buat variabel untuk tanda.
+  	- cegah eror ketika pembagian dengan 0, cek b dengan if, jika 0 maka langsung return 0.
+  	- cek tanda dengan 2 percaangan. 1 jika a min dan b positif tanda jadi min (-1). 2 jika a positif dan b min tanda jadi min juga. jika tidak maka tanda = 1 (saat deklarasi tanda = 1).
+  	- simpan nilai absolut a dan b dengan percabangan. Jika a positif maka absolutnya -a, jika tidak maka absolutnya b. Lakukan juga untuk absolut b.
+  	- lakukan pengurangan berulang yang berhenti ketika absolut a kurang dari absolut b. Dalam setiap perulangan increment d untuk menghitung jumlah loop.
+  	- keluarkan nilai -d jika tanda = -1, dan d jika tanda = 1.
+- mod
+  	- mod adalah mencari sisa bagi, maka perlu hasil pembagian dan sisa. buat 2 variabel itu.
+  	- isi hasil bagi dengan memakai fungsi div.
+  	- sisa adalah bilangan yang dibagi dikurang pembagi kali hasil bagi. Maka `sisa = a - (hasil_bagi * b);`.
+  	- keluarkan hasil dengan `return sisa`;
+- memcpy
+  	- lakukan loop sebanyak size dengan `for (i = 0; i < size; i++)`.
+  	- Setiap loop akan mengisi destinasi dengan nilai yang sama dengan sumber dengan `dst[i] = src[i]`
+- strlen
+  	- strlen menghitung panjang dengan menghitung jumlah char sampai bertemu '\o'. sehingga panjang adalah jumlah index.
+  	- buat variabel panjang = 0;
+  	- lakukan loop sampai menemukan '\0' dengan `while (str[panjang] != '\0')`.
+  	- setiap loop akan incremen panjang untuk ke index selanjutnya. setelah loop selesai, return panjang.
+- strcmp
+  	- fungsi ini membandingkan setiap index yang sama anatara 2 string.
+  	- Buat variabel untuk index.
+  	- Lakukan loop selama index ke i dari kedua string sama `while (str1[i] == str2[i])`.
+  	- dalam loop, cek Jika index ke i berisi '\0'. jika iya maka return true. jika tidak lanjutkan loop.
+  	- jika loop selesai berarti ada index yang tidak saman maka return false.
+- strcpy
+  	- fungsi ini menyalin isi src ke destinasi (dst).
+  	- Buat variabel untuk index yaitu i.
+  	- Lakukan loop sampai bertemu '\0' dengan `while (src[i] != '\0')` karena jika bertemu null berarti string sudah selesai.
+  	- Setiap loop lakukan `dst[i] = src[i]`. Kemudian incremen i untuk pindah ke index selanjutnya.
+  	- Setelah keluar dari loop, tambahkan '\0' pada akhir dst (dst[i]) karena loop berhenti sebelum menyalin '\0'.
+- clear
+  	- Fungsi ini mengisi memory dengan 0.
+  	- Lakukan loop sebanyak size dengan `for (i = 0; i < size; i++)`.
+  	- Setiap loop mengisi buf index ke i dengan 0 `buf[i] = 0;`.
 
 ### Screenshot _(Screenshot)_
 Masukkan screenshot hasil eksekusi program atau proses yang relevan.  
