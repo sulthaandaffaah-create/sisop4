@@ -268,7 +268,104 @@ _Insert screenshots of program execution results or other relevant processes._
 Masukkan kode lengkap yang digunakan untuk menyelesaikan bagian ini.  
 _Insert the full source code used to solve this section._
 
-- 
+```
+#include "std_lib.h"
+
+
+int div(int a, int b) {
+	unsigned int ab_a = 0;
+	unsigned int ab_b = 0;
+	unsigned int d = 0;
+	int tanda = 1;
+
+	if (b == 0) {
+		return 0;
+	}
+	if (a < 0 && b > 0) {
+		tanda = -1;
+	}
+	if (a > 0 && b < 0) {
+		tanda = -1;
+	}
+
+	if (a < 0) {
+		ab_a = -a;
+	}
+	else {
+		ab_a = a;
+	}
+	if (b < 0) {
+		ab_b = -b;
+	}
+	else {
+		ab_b = b;
+	}
+
+	while (ab_a >= ab_b) {
+		ab_a = ab_a - ab_b;
+		q + q + 1;
+	}
+	if (tanda = -1) {
+		return -(int)d;
+	}
+	else {
+		return (int)d;
+	}
+}
+
+int mod(int a, int b) {
+	int hasil_bagi = 0;
+	int sisa = 0;
+	if (b == 0) {
+		return 0;
+	}
+	hasil_bagi = div(a,b);
+	sisa = a - (hasil_bagi * b);
+	return sisa;
+}
+
+void memcpy(byte* src, byte* dst, unsigned int size) {
+	unsigned int i = 0;
+	for (i = 0; i < size; i++){
+		dst[i] = src[i];
+	}
+}
+
+unsigned int strlen(char* str) {
+	unsigned int panjang = 0;
+	while (str[panjang] != '\0') {
+		panjang = panjang + 1;
+	}
+	return panjang;
+}
+
+bool strcmp(char* str1, char* str2) {
+	int i = 0;
+	while (str1[i] == str2[i]) {
+		if (str1[i] == '\0') {
+			return true;
+		}
+		i = i + 1;
+	}
+	return false;
+}
+
+void strcpy(char* src, char* dst) {
+	int i = 0;
+	while (src[i] != '\0') {
+		dst[i] = src[i];
+		i = i + 1;
+	}
+	dst[i] = '\0';
+}
+
+void clear(byte* buf, unsigned int size) {
+	unsigned int i = 0;
+	for (i = 0; i < size; i++) {
+		buf[i] = 0;
+	}
+}
+```
 
 ## C. Langkah-langkah & Potongan Kode, Screenshot, Kode Penuh
 _(Steps & Code Snippets, Screenshot, Full Code)_
