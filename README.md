@@ -411,7 +411,18 @@ _(Steps & Code Snippets, Screenshot, Full Code)_
 Jelaskan langkah-langkah yang dilakukan dan berikan potongan kode dari langkah-langkah yang kalian jelaskan jika ada.  
 _Explain the steps performed and include relevant code snippets from the steps you describe if applicable._
 
-- 
+- handleEcho
+  	- Command echo akan mencetak ulang apa yang diinputkan.
+  	- Maka copy input ke output menggunakan strcpy yang sudah dibuat pada soal sebelumnya
+- handleGrep
+  	- Command grep akan melakukan cetak ulang jika pattern yang diminta ada di inputan.
+  	- Fungsi ini akan menerima input, pattern, dan output.
+  	- Buat variabel untuk indexing (i dan j) dan untuk cek apakah pattern ditemukan (bool ketemu).
+  	- Lakukan perulangan (loop besar) sampai input habis atau pattern ditemukan dengan `while (input[i] != '\0' && ketemu == false)`. kalau salah satu tidak terpenuhi loop akan berhenti. Kemudian dalam loop lakukan :
+  	- Index i digunakan untuk awal dari input, dan j untuk indexing dari i sampai akhir pattern dan untuk indexing pattern.
+  	- cek dari awal dengan gunakan loop ketika input ke i+j == pattern ke j dan keduanya bukan null. Jika sesuai maka geser j (j++). Jika tidak sesuai maka keluar dari loop dan geser i(i++) ubah j menjadi 0 lagi sebelum masuk ke loop ini lagi (diubah di atas while).
+  	- Jika pattern ke j == null artinya loop selesai karena pattern ditemukan, maka ubah ketemu menjadi true.
+  	- Setelah keluar dari loop besar, gunakan percabangan untuj jika pattern ditemukan dan tidak. jika ketemu == true maka salin input ke output dengan strpy. Jika tidak maka output = null.
 
 ### Screenshot _(Screenshot)_
 Masukkan screenshot hasil eksekusi program atau proses yang relevan.  
