@@ -54,6 +54,14 @@ _Explain the steps performed and include relevant code snippets from the steps y
   	- jika c bukan enter atau backspace maka ubah buf[i] menjadi c untuk menyimpan input, increment i, kemudian displaykan input dengan `interrupt(0x10, (0x0E << 8) | c, 0, 0, 0)`
 
 - clearScreen
+  	- Bersihkan layar pakai `interrupt(0x10, (0x06 << 8) | 0, 0x0700, 0, (24 << 8) | 79);` AX sesuai AH dan AL pada soal, BX sesuai BH CX 0 karena CH dan CL 0, DX sesuai DH dan DL.
+  	- Pindahkan kursor dengan AH = 0x02 makan jadi `interrupt(0x10, (0x02 << 8) | 0, 0, 0, 0);`
+  	- lakukan loop sebanyak 80x25, setiap loop melakukan
+  	  ```
+  		putInMemory(0xB800, i * 2, ' ');
+		putInMemory(0xB800, i * 2 + 1, 0x07);
+  	  ```
+  	  yaitu mengisi spasi pada memory genap dan mengisi atribut pada posisi ganjil.
 
 ### Screenshot _(Screenshot)_
 Masukkan screenshot hasil eksekusi program atau proses yang relevan.  
