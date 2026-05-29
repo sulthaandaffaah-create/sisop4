@@ -423,7 +423,199 @@ _Insert screenshots of program execution results or other relevant processes._
 Masukkan kode lengkap yang digunakan untuk menyelesaikan bagian ini.  
 _Insert the full source code used to solve this section._
 
-- 
+```
+#include "std_lib.h"
+#include "kernel.h"
+
+void parseSegment(char* seg, char* cmd, char* args);
+void handleEcho(char* args, char* output);
+void handleGrep(char* pattern, char* input, char* output);
+void handleWc(char* input, char* output);
+void handleCommand(char* buf);
+void intToStr(int n, char* str);
+
+void printString(char* str) {
+	int i = 0;
+	while (str[i] != '\0') {
+		int ax = (0x0E << 8) | (str[i] & 0xFF);
+		interrupt(0x10, ax, 0, 0, 0);
+		i++;
+	}
+}
+
+void readString(char* buf) {
+	int i = 0;
+	while (1) {
+		int ax = interrupt(0x16, 0x0000, 0, 0, 0);
+		char c = ax & 0xFF;
+		if (c == '\r') {
+			buf[i] = '\0';
+			interrupt(0x10, (0x0E << 8) | '\r', 0, 0, 0);
+			break;
+		}
+		else if (c == '\b') {
+			if (i > 0) {
+				i--;
+				interrupt(0x10, (0x0E << 8) | '\b', 0, 0, 0);
+				interrupt(0x10, (0x0E << 8) | ' ', 0, 0, 0);
+				interrupt(0x10, (0x0E << 8) | '\b', 0, 0, 0);
+			}
+		}
+		else {
+			buf[i] = c;
+			i++;
+			interrupt(0x10, (0x0E << 8) | c, 0, 0, 0);
+		}
+	}
+}
+
+void clearScreen() {
+	interrupt(0x10, (0x06 << 8) | 0, 0x0700, 0, (24 << 8) | 79);
+	interrupt(0x10, (0x02 << 8) | 0, 0, 0, 0);
+	for (int i = 0; i < 2000; i++) {
+		putInMemory(0xB800, i * 2, ' ');
+		putInMemory(0xB800, i * 2 + 1, 0x07);
+	}
+}
+
+void intToStr(int n, char* str) {
+    int i = 0;
+    char tmp[12];
+    if (n == 0) {
+        str[0] = '0';
+        str[1] = '\0';
+        return;
+    }
+    while (n > 0) {
+        tmp[i++] = '0' + mod(n, 10);
+        n = div(n, 10);
+    }
+    int j;
+    for (j = 0; j < i; j++) {
+        str[j] = tmp[i - 1 - j];
+    }
+    str[i] = '\0';
+}
+
+void parseSegment(char* seg, char* cmd, char* args) {
+    int i = 0, j = 0;
+    while (seg[i] == ' ') i++;
+    while (seg[i] != ' ' && seg[i] != '\0') cmd[j++] = seg[i++];
+    cmd[j] = '\0';
+    j = 0;
+    while (seg[i] == ' ') i++;
+    while (seg[i] != '\0') args[j++] = seg[i++];
+    while (j > 0 && args[j - 1] == ' ') j--;
+    args[j] = '\0';
+}
+
+
+
+void handleEcho(char* args, char* output) {
+	strcpy(args, output);
+}
+
+void handleGrep(char* pattern, char* input, char* output) {
+	int i = 0;
+	int j = 0;
+	bool ketemu = false;
+	while (input[i] != '\0' && ketemu == false){
+		j = 0;
+		while (input[i + j] == pattern[j] && pattern[j] != '\0' && input[i + j] != '\0') {
+			j = j + 1;
+		}
+		if (pattern[j] == '\0') {
+			ketemu = true;
+		}
+	i = i + 1;
+	}
+	if (ketemu == true) {
+		strcpy(input, output);
+	}
+	else {
+		output[0] = '\0';
+	}
+}
+
+
+void handleWc(char* input, char* output) {
+     /* Insert Function Here */
+}
+
+void handleCommand(char* buf) {
+    char segments[3][128];
+    int segCount = 0;
+    int i = 0, j = 0, seg = 0;
+    char cmd[32], args[128], pipeIn[128], pipeOut[128];
+
+    clear((byte*)segments[0], 128);
+    clear((byte*)segments[1], 128);
+    clear((byte*)segments[2], 128);
+    clear((byte*)pipeIn, 128);
+    clear((byte*)pipeOut, 128);
+
+    while (buf[i] != '\0' && seg < 3) {
+        if (buf[i] == '|') {
+            segments[seg][j] = '\0';
+            seg++;
+            j = 0;
+        } else {
+            segments[seg][j++] = buf[i];
+        }
+        i++;
+    }
+    segments[seg][j] = '\0';
+    segCount = seg + 1;
+
+    for (i = 0; i < segCount; i++) {
+        clear((byte*)cmd, 32);
+        clear((byte*)args, 128);
+        clear((byte*)pipeOut, 128);
+
+        parseSegment(segments[i], cmd, args);
+
+        if (strcmp(cmd, "echo")) {
+            handleEcho(args, pipeOut);
+        } else if (strcmp(cmd, "grep")) {
+            handleGrep(args, pipeIn, pipeOut);
+        } else if (strcmp(cmd, "wc")) {
+            handleWc(pipeIn, pipeOut);
+        } else {
+            printString("Unknown command: ");
+            printString(cmd);
+            printString("\n");
+            return;
+        }
+
+        strcpy(pipeOut, pipeIn);
+    }
+
+    if (strlen(pipeIn) > 0) {
+        printString(pipeIn);
+        printString("\n");
+    } else {
+        printString("NULL\n");
+    }
+}
+
+int main() {
+    char buf[128];
+
+    clearScreen();
+    printString("SumbulOS - [[PUT YOUR TEAM CODE HERE]]\n");
+
+    while (true) {
+        printString("$> ");
+        readString(buf);
+        printString("\n");
+
+        if (strlen(buf) > 0) {
+		/* InsrtFunction Here */
+		handleCommand(buf);
+        }
+    }
+}
+```
 
 ## D. Langkah-langkah & Potongan Kode, Screenshot, Kode Penuh
 _(Steps & Code Snippets, Screenshot, Full Code)_
